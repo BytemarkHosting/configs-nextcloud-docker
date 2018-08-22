@@ -14,8 +14,8 @@ networks:
 # Create persistent Docker volumes to preserve important data.
 # We don't want our data to be lost when restarting containers.
 volumes:
-  vol-nc-db:
-  vol-nc-content:
+  vol-nextcloud-db:
+  vol-nextcloud-content:
 
 # Create our containers.
 services:
@@ -61,7 +61,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-  nc-db:
+  nextcloud-db:
     # https://hub.docker.com/_/mariadb/
     # Specify 10.3 as we only want watchtower to apply minor updates
     # (eg, 10.3.1) and not major updates (eg, 10.4).
@@ -71,7 +71,7 @@ services:
       - backend
     volumes:
       # Ensure the database persists between restarts.
-      - vol-nc-db:/var/lib/mysql
+      - vol-nextcloud-db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${NEXTCLOUD_DB_ROOT_PASSWORD}
       MYSQL_DATABASE: ${NEXTCLOUD_DB_NAME}
@@ -79,12 +79,12 @@ services:
       MYSQL_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
 
   # The main front-end application.
-  nc:
+  nextcloud:
     # https://hub.docker.com/_/nextcloud/
     # Replace "latest" with "13.0.5" to stick to a specific version.
     image: nextcloud:latest
     depends_on:
-      - nc-db
+      - nextcloud-db
     restart: always
     networks:
       - backend
@@ -92,14 +92,14 @@ services:
     expose:
       - "80"
     volumes:
-      # Ensure NC content persist between restarts.
-      - vol-nc-content:/var/www/html
+      # Ensure Nextcloud content persist between restarts.
+      - vol-nextcloud-content:/var/www/html
       # User data stored in separate drive if avavilable otherwise just a folder on the root drive.
       - /data:/var/www/html/data
       # Install our own php.ini, which can be customized.
       - ./php.ini:/usr/local/etc/php/php.ini
     environment:
-      MYSQL_HOST: nc-db:3306
+      MYSQL_HOST: nextcloud-db:3306
       MYSQL_DATABASE: ${NEXTCLOUD_DB_NAME}
       MYSQL_USER: ${NEXTCLOUD_DB_USER}
       MYSQL_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
@@ -116,11 +116,11 @@ services:
   # Navigate to http://example.com/phpmyadmin/ to manage your MySQL
   # databases. (Don't forget the last forward slash.) Like the Traefik
   # dashboard, this is behind a login prompt to help you stay secure.
-  nc-phpmyadmin:
+  nextcloud-phpmyadmin:
     # https://hub.docker.com/r/phpmyadmin/phpmyadmin/
     image: phpmyadmin/phpmyadmin:latest
     depends_on:
-      - nc-db
+      - nextcloud-db
     restart: always
     networks:
       - backend
@@ -131,7 +131,7 @@ services:
       # Install our own php.ini, which can be customized.
       - ./php.ini:/usr/local/etc/php/php.ini
     environment:
-      PMA_HOST: nc-db
+      PMA_HOST: nextcloud-db
       PMA_ABSOLUTE_URI: /phpmyadmin/
       MYSQL_ROOT_PASSWORD: ${NEXTCLOUD_DB_ROOT_PASSWORD}
     labels:
