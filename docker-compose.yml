@@ -94,8 +94,6 @@ services:
     volumes:
       # Ensure Nextcloud content persist between restarts.
       - vol-nextcloud-content:/var/www/html
-      # User data stored in separate drive if avavilable otherwise just a folder on the root drive.
-      - /data:/var/www/html/data
       # Install our own php.ini, which can be customized.
       - ./php.ini:/usr/local/etc/php/php.ini
     environment:
@@ -151,4 +149,3 @@ services:
     restart: always
     networks:
       - frontend
- 
