@@ -105,6 +105,7 @@ services:
       - "traefik.frontend.rule=Host:${NEXTCLOUD_DOMAINS}"
       - "traefik.port=80"
       - "traefik.protocol=http"
+      #- "traefik.frontend.headers.STSSeconds=15768000"
 
   # Navigate to http://example.com/phpmyadmin/ to manage your MySQL
   # databases. (Don't forget the last forward slash.) Like the Traefik
