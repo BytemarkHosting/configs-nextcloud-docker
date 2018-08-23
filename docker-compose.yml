@@ -99,9 +99,6 @@ services:
       MYSQL_DATABASE: ${NEXTCLOUD_DB_NAME}
       MYSQL_USER: ${NEXTCLOUD_DB_USER}
       MYSQL_PASSWORD: ${NEXTCLOUD_DB_PASSWORD}
-      NEXTCLOUD_ADMIN_USER: ${NEXTCLOUD_ADMIN_USER}
-      NEXTCLOUD_ADMIN_PASSWORD: ${NEXTCLOUD_ADMIN_PASSWORD}
-      NEXTCLOUD_DATA_DIR: ${NEXTCLOUD_DATA_DIR}
     labels:
       - "traefik.docker.network=frontend"
       - "traefik.enable=true"
@@ -138,7 +135,7 @@ services:
       - "traefik.protocol=http"
       # Remove the next line if you don't want a browser login prompt.
       - "traefik.frontend.auth.basic=${BASIC_AUTH}"
-      
+
   # This allows Nextcloud to send email straight out of the box without
   # having to rely on an external provider like SendGrid or MailGun.
   # It makes an SMTP host available at the hostname "mail".
