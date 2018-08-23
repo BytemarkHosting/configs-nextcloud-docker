@@ -87,8 +87,6 @@ services:
     networks:
       - backend
       - frontend
-    expose:
-      - "80"
     volumes:
       # Ensure Nextcloud content persist between restarts.
       - vol-nextcloud-content:/var/www/html
@@ -119,8 +117,6 @@ services:
     networks:
       - backend
       - frontend
-    expose:
-      - "80"
     volumes:
       # Install our own php.ini, which can be customized.
       - ./php.ini:/usr/local/etc/php/php.ini
