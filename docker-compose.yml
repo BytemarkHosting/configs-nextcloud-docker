@@ -24,7 +24,7 @@ services:
   # Its dashboard is at http://example.com/traefik/ (behind a login).
   traefik:
     # https://hub.docker.com/_/traefik/
-    image: traefik:latest
+    image: traefik:v1.7.16
     command: --api --docker --acme.email="${ACME_EMAIL}"
     restart: always
     networks:
